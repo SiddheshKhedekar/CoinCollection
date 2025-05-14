@@ -23,6 +23,26 @@ class CurrencyServiceImplTest {
     }
 
     @Test
+    void testGetAllCurrencies_returnsListOfCurrencies() {
+        // Arrange
+        Currency usd = new Currency("USD", "United States Dollar");
+        Currency eur = new Currency("EUR", "Euro");
+
+        List<Currency> expectedCurrencies = Arrays.asList(usd, eur);
+        when(currencyRepository.findAll()).thenReturn(expectedCurrencies);
+
+        // Act
+        List<Currency> result = currencyService.getAllCurrencies();
+
+        // Assert
+        assertEquals(2, result.size());
+        assertEquals("USD", result.get(0).getCode());
+        assertEquals("EUR", result.get(1).getCode());
+
+        verify(currencyRepository, times(1)).findAll();
+    }
+
+    @Test
     void testGetCurrencyByCode_found() {
         Currency currency = new Currency("USD", "United States Dollar");
         when(currencyRepository.findByCode("USD")).thenReturn(Optional.of(currency));

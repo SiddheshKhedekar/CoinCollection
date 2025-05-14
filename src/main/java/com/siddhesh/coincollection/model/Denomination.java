@@ -1,5 +1,6 @@
 package com.siddhesh.coincollection.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.siddhesh.coincollection.model.Currency;
 import jakarta.persistence.*;
 
@@ -23,6 +24,7 @@ public class Denomination {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "currency_id", nullable = false)
+    @JsonBackReference
     private Currency currency;
 
     public Denomination(Long id, String series, Double value, String imageUrl, Currency currency) {

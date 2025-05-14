@@ -1,5 +1,6 @@
 package com.siddhesh.coincollection.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class Currency {
     private String description;
 
     @OneToMany(mappedBy = "currency", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Denomination> denominations;
 
     public Currency() {

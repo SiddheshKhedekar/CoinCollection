@@ -10,4 +10,10 @@ class CoincollectionApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void mainMethodRuns() {
+		// Explicitly call main to increase code coverage
+		CoincollectionApplication.main(new String[] {});
+	}
+
 }

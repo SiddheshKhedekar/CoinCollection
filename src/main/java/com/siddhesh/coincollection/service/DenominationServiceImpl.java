@@ -29,8 +29,9 @@ public class DenominationServiceImpl implements DenominationService {
 
     @Override
     public Optional<Denomination> getDenominationById(Long id) {
-        return Optional.ofNullable(denominationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Denomination not found with id: " + id)));
+        Denomination denomination = denominationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Denomination not found with id: " + id));
+        return Optional.of(denomination);
     }
 
     @Override
@@ -57,30 +58,20 @@ public class DenominationServiceImpl implements DenominationService {
 
     @Override
     public Denomination updateDenomination(Long id, Denomination updated) {
-        Optional<Denomination> existingOptional = getDenominationById(id);
-        if (existingOptional.isPresent()) {
-            Denomination existing = existingOptional.get();
-            Denomination updatedDenomination = new Denomination(
-                    existing.getId(),
-                    updated.getSeries(),
-                    updated.getValue(),
-                    updated.getImageUrl(),
-                    updated.getCurrency()
-            );
-            return denominationRepository.save(updatedDenomination);
-        } else {
-            throw new ResourceNotFoundException("Denomination not found with id: " + id);
-        }
+        Denomination existing = getDenominationById(id).get();
+        Denomination updatedDenomination = new Denomination(
+                existing.getId(),
+                updated.getSeries(),
+                updated.getValue(),
+                updated.getImageUrl(),
+                updated.getCurrency()
+        );
+        return denominationRepository.save(updatedDenomination);
     }
 
     @Override
     public void deleteDenomination(Long id) {
-        Optional<Denomination> optionalDenomination = getDenominationById(id);
-        if (optionalDenomination.isPresent()) {
-            Denomination denomination = optionalDenomination.get();
-            denominationRepository.delete(denomination);
-        } else {
-            throw new ResourceNotFoundException("Denomination not found with id: " + id);
-        }
+        Denomination denomination = getDenominationById(id).get();
+        denominationRepository.delete(denomination);
     }
 }

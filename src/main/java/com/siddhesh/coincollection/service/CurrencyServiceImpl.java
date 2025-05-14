@@ -41,25 +41,15 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public Currency updateCurrency(Long id, Currency currencyDetails) {
-        Optional<Currency> optionalCurrency = getCurrencyById(id);
-        if (optionalCurrency.isPresent()) {
-            Currency currency = optionalCurrency.get();
-            currency.setCode(currencyDetails.getCode());
-            currency.setDescription(currencyDetails.getDescription());
-            return currencyRepository.save(currency);
-        } else {
-            throw new ResourceNotFoundException("Currency not found with id: " + id);
-        }
+        Currency currency = getCurrencyById(id).get(); // this will throw if not found
+        currency.setCode(currencyDetails.getCode());
+        currency.setDescription(currencyDetails.getDescription());
+        return currencyRepository.save(currency);
     }
 
     @Override
     public void deleteCurrency(Long id) {
-        Optional<Currency> optionalCurrency = getCurrencyById(id);
-        if (optionalCurrency.isPresent()) {
-            Currency currency = optionalCurrency.get();
-            currencyRepository.delete(currency);
-        } else {
-            throw new ResourceNotFoundException("Currency not found with id: " + id);
-        }
+        Currency currency = getCurrencyById(id).get(); // this will throw if not found
+        currencyRepository.delete(currency);
     }
 }
