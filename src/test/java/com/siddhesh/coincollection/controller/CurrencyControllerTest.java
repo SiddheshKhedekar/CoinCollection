@@ -5,13 +5,16 @@ import com.siddhesh.coincollection.model.Currency;
 import com.siddhesh.coincollection.service.CurrencyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,22 +25,25 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(CurrencyController.class)
+@ExtendWith(MockitoExtension.class)
 class CurrencyControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
     @Mock
     private CurrencyService currencyService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @InjectMocks
+    private CurrencyController currencyController;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private Currency currency;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(currencyController).build();
         currency = new Currency("USD", "United States Dollar");
         currency.setId(1L);
     }

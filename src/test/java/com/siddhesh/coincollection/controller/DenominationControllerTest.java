@@ -6,12 +6,14 @@ import com.siddhesh.coincollection.model.Denomination;
 import com.siddhesh.coincollection.service.DenominationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,25 +25,29 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(DenominationController.class)
+@ExtendWith(MockitoExtension.class)
 public class DenominationControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
     @Mock
     private DenominationService denominationService;
 
-    @Autowired
+    @InjectMocks
+    private DenominationController denominationController;
+
     private ObjectMapper objectMapper;
 
     private Denomination sampleDenomination;
 
     @BeforeEach
     public void setup() {
+        MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(denominationController).build();
+        objectMapper = new ObjectMapper();
+
         Currency currency = new Currency();
         currency.setId(1L);
-
         sampleDenomination = new Denomination(1L, "Series-A", 5.0, "url", currency);
     }
 
